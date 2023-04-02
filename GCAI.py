@@ -30,6 +30,85 @@ if "input" not in st.session_state:
 if "stored_session" not in st.session_state:
     st.session_state["stored_session"] = []
     
+def res(prompt):
+    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=512))
+    service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
+    index_summaries = ['Fintech related papers' for i in range(0,11)]
+    index_summaries[0] = 'WITS-WBS Gillmore Centre Fintech Workshop & Industry Conference'
+    ind = {}
+    ind[0] = GPTSimpleVectorIndex.load_from_disk('WITS_Gillmore.json', service_context=service_context)
+    for i in range(1,11):
+        ind[i] = GPTSimpleVectorIndex.load_from_disk(f'IndPapersB{i}.json', service_context=service_context)
+
+    graph = ComposableGraph.from_indices(
+        GPTListIndex, 
+        [ind[i] for i in range(0,11)], 
+        index_summaries=index_summaries,
+        service_context=service_context)
+
+    decompose_transform = DecomposeQueryTransform(
+        llm_predictor, verbose=True)
+
+    query_configs = [
+        {
+            "index_struct_type": "simple_dict",
+            "query_mode": "default",
+            "query_kwargs": {
+                "similarity_top_k": 1,
+                # "include_summary": True
+            },
+            "query_transform": decompose_transform
+        },
+        {
+            "index_struct_type": "list",
+            "query_mode": "default",
+            "query_kwargs": {
+                "response_mode": "tree_summarize",
+                "verbose": True
+            }
+        },
+    ]
+
+    index_configs = [IndexToolConfig(
+         index=ind[0], 
+         name="Vector Index 1",
+         description="useful for when you want to answer queries about Gillmore Centre Fintech Workshop & Industry Conference",
+         index_query_kwargs={"similarity_top_k": 3},
+         tool_kwargs={"return_direct": True})]
+    for i in range(1, 11):
+        tool_config = IndexToolConfig(
+            index=ind[i], 
+            name=f"Vector Index {i+1}",
+            description="useful for when you want to answer queries about fintech literature",
+            index_query_kwargs={"similarity_top_k": 3},
+            tool_kwargs={"return_direct": True})
+        index_configs.append(tool_config)
+
+    graph_config = GraphToolConfig(
+        graph=graph,
+        name="Graph Index",
+        description="useful for when you want to answer queries about anything.",
+        query_configs=query_configs,
+        tool_kwargs={"return_direct": True})
+
+    toolkit = LlamaToolkit(
+        index_configs=index_configs,
+        graph_configs=[graph_config])
+
+    memory = ConversationBufferMemory(memory_key="chat_history")
+    llm=OpenAI(temperature=0.2)
+    agent_chain = create_llama_chat_agent(
+        toolkit,
+        llm,
+        memory=memory,
+        verbose=True)
+    response = agent_chain.run(input=prompt)
+    
+    return str(response)
+
+def generate_response(prompt):
+    message = res(prompt)
+    return message
 
 
 # Define function to get user input
@@ -98,88 +177,7 @@ if API_O:
 
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
-    st.stop()
-
-# Add a button to start a new chat
-st.button("New Chat", on_click = new_chat, type='primary')    
-    
-llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=512))
-service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
-index_summaries = ['Fintech related papers' for i in range(0,11)]
-index_summaries[0] = 'WITS-WBS Gillmore Centre Fintech Workshop & Industry Conference'
-ind = {}
-ind[0] = GPTSimpleVectorIndex.load_from_disk('WITS_Gillmore.json', service_context=service_context)
-for i in range(1,11):
-    ind[i] = GPTSimpleVectorIndex.load_from_disk(f'IndPapersB{i}.json', service_context=service_context)
-
-graph = ComposableGraph.from_indices(
-    GPTListIndex, 
-    [ind[i] for i in range(0,11)], 
-    index_summaries=index_summaries,
-    service_context=service_context)
-
-decompose_transform = DecomposeQueryTransform(
-    llm_predictor, verbose=True)
-
-query_configs = [
-    {
-        "index_struct_type": "simple_dict",
-        "query_mode": "default",
-        "query_kwargs": {
-            "similarity_top_k": 1,
-            # "include_summary": True
-        },
-        "query_transform": decompose_transform
-    },
-    {
-        "index_struct_type": "list",
-        "query_mode": "default",
-        "query_kwargs": {
-            "response_mode": "tree_summarize",
-            "verbose": True
-        }
-    },
-]
-
-index_configs = [IndexToolConfig(
-     index=ind[0], 
-     name="Vector Index 1",
-     description="useful for when you want to answer queries about Gillmore Centre Fintech Workshop & Industry Conference",
-     index_query_kwargs={"similarity_top_k": 3},
-     tool_kwargs={"return_direct": True})]
-for i in range(1, 11):
-    tool_config = IndexToolConfig(
-        index=ind[i], 
-        name=f"Vector Index {i+1}",
-        description="useful for when you want to answer queries about fintech literature",
-        index_query_kwargs={"similarity_top_k": 3},
-        tool_kwargs={"return_direct": True})
-    index_configs.append(tool_config)
-
-graph_config = GraphToolConfig(
-    graph=graph,
-    name="Graph Index",
-    description="useful for when you want to answer queries about anything.",
-    query_configs=query_configs,
-    tool_kwargs={"return_direct": True})
-
-toolkit = LlamaToolkit(
-    index_configs=index_configs,
-    graph_configs=[graph_config])
-
-memory = ConversationBufferMemory(memory_key="chat_history")
-llm=OpenAI(temperature=0.2)
-agent_chain = create_llama_chat_agent(
-    toolkit,
-    llm,
-    memory=memory,
-    verbose=True)
-
-def generate_response(prompt):
-    response = agent_chain.run(input=prompt)
-    message = str(response)
-    return message
-
+    st.stop()  
 
 # Get the user input
 user_input = get_text()
@@ -204,6 +202,9 @@ with st.expander("Conversation", expanded=True):
     download_str = '\n'.join(download_str)
     if download_str:
         st.download_button('Download',download_str)
+
+# Add a button to start a new chat
+st.button("New Chat", on_click = new_chat, type='primary')  
 
 # st.button("New Chat", on_click = new_chat, type='primary')
 # Display stored conversation sessions in the sidebar

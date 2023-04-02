@@ -179,6 +179,7 @@ else:
 
 # Get the user input
 user_input = get_text()
+st.session_state.past.append(user_input)
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
 # if user_input:
@@ -186,9 +187,9 @@ user_input = get_text()
 #     st.session_state.past.append(user_input)  
 #     st.session_state.generated.append(output)  
 
-def send(input):
+def send(input)
     output = generate_response(input) 
-    st.session_state.past.append(input)  
+    # st.session_state.past.append(input)  
     st.session_state.generated.append(output)  
 
 st.button("Send", on_click = send(user_input), type='primary')    

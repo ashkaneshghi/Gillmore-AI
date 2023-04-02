@@ -187,7 +187,7 @@ st.session_state.past.append(user_input)
 #     st.session_state.past.append(user_input)  
 #     st.session_state.generated.append(output)  
 
-def send(input)
+def send(input):
     output = generate_response(input) 
     # st.session_state.past.append(input)  
     st.session_state.generated.append(output)  

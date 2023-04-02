@@ -30,7 +30,7 @@ if "input" not in st.session_state:
 if "stored_session" not in st.session_state:
     st.session_state["stored_session"] = []
     
-def res(prompt):
+def res(prompt,AIAPI):
     llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=512))
     service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
     index_summaries = ['Fintech related papers' for i in range(0,11)]
@@ -96,7 +96,7 @@ def res(prompt):
         graph_configs=[graph_config])
 
     memory = ConversationBufferMemory(memory_key="chat_history")
-    llm=OpenAI(temperature=0.2)
+    llm=OpenAI(temperature=0.2, openai_api_key=AIAPI)
     agent_chain = create_llama_chat_agent(
         toolkit,
         llm,
@@ -105,10 +105,6 @@ def res(prompt):
     response = agent_chain.run(input=prompt)
     
     return str(response)
-
-def generate_response(prompt):
-    message = res(prompt)
-    return message
 
 
 # Define function to get user input
@@ -174,7 +170,9 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     
 if API_O:
     os.environ['OPENAI_API_KEY'] = API_O
-
+    def generate_response(prompt):
+    message = res(prompt,API_O)
+    return message
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
     st.stop()  

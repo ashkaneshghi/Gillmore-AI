@@ -15,7 +15,7 @@ import os
 from llama_index import GPTSimpleVectorIndex, download_loader
 from pathlib import Path
 
-os.environ['OPENAI_API_KEY'] = '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'
+os.environ['OPENAI_API_KEY'] = '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'
 
 # Set Streamlit page configuration
 st.set_page_config(page_title='Gillmore AI', layout='wide')

@@ -169,7 +169,7 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     #     )  
     
 if API_O:
-    #os.environ['OPENAI_API_KEY'] = API_O
+    # os.environ['OPENAI_API_KEY'] = API_O
     def generate_response(prompt):
         message = res(prompt,API_O)
         return message
@@ -181,10 +181,17 @@ else:
 user_input = get_text()
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
-if user_input:
-    output = generate_response(user_input) 
-    st.session_state.past.append(user_input)  
+# if user_input:
+#     output = generate_response(user_input) 
+#     st.session_state.past.append(user_input)  
+#     st.session_state.generated.append(output)  
+
+def send(input)
+    output = generate_response(input) 
+    st.session_state.past.append(input)  
     st.session_state.generated.append(output)  
+
+st.button("Send", on_click = send(user_input), type='primary')    
 
 # Allow to download as well
 download_str = []
@@ -202,7 +209,7 @@ with st.expander("Conversation", expanded=True):
         st.download_button('Download',download_str)
 
 # Add a button to start a new chat
-st.button("New Chat", on_click = new_chat, type='primary')  
+st.sidebar.button("New Chat", on_click = new_chat, type='primary')  
 
 # st.button("New Chat", on_click = new_chat, type='primary')
 # Display stored conversation sessions in the sidebar

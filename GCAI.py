@@ -171,8 +171,8 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
 if API_O:
     os.environ['OPENAI_API_KEY'] = API_O
     def generate_response(prompt):
-    message = res(prompt,API_O)
-    return message
+        message = res(prompt,API_O)
+        return message
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
     st.stop()  

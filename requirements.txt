@@ -2,3 +2,4 @@ langchain
 llama_index
 streamlit
 streamlit_chat
+openai

@@ -168,7 +168,7 @@ toolkit = LlamaToolkit(
     graph_configs=[graph_config])
 
 memory = ConversationBufferMemory(memory_key="chat_history")
-llm=OpenAI(temperature=0.2, openai_api_key=AIAPI)
+llm=OpenAI(temperature=0.2)
 agent_chain = create_llama_chat_agent(
     toolkit,
     llm,

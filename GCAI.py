@@ -170,8 +170,8 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     
 if API_O:
     # os.environ['OPENAI_API_KEY'] = API_O
-    def generate_response(prompt):
-        message = res(prompt,API_O)
+    def generate_response(prompt,AIAPI):
+        message = res(prompt,AIAPI)
         return message
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
@@ -187,12 +187,12 @@ st.session_state.past.append(user_input)
 #     st.session_state.past.append(user_input)  
 #     st.session_state.generated.append(output)  
 
-def send(input):
-    output = generate_response(input) 
+def send(input,AIAPI):
+    output = generate_response(input,AIAPI) 
     st.session_state.past.append(input)  
     st.session_state.generated.append(output)  
 
-st.button("Send", on_click = send(user_input), type='primary')    
+st.button("Send", on_click = send(user_input,API_O), type='primary')    
 
 # Allow to download as well
 download_str = []

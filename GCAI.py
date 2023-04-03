@@ -185,7 +185,7 @@ user_input = get_text()
 
 if user_input:
     showres(user_input)
-    st.button("Send", on_click = showres(user_input), type='primary')
+#     st.button("Send", on_click = showres(user_input), type='primary')
 #     output = agent_chain.run(input=user_input) 
 #     st.session_state.past.append(user_input)  
 #     st.session_state.generated.append(output)  

@@ -94,6 +94,7 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     #     )  
     
 if API_O:
+    st.session_state.generated.append("Hello!")
     user_input = get_text()
 #     %env OPENAI_API_KEY=API_O
 #     open_api_key = os.getenv("OPENAI_API_KEY")
@@ -168,24 +169,23 @@ toolkit = LlamaToolkit(
     graph_configs=[graph_config])
 
 memory = ConversationBufferMemory(memory_key="chat_history")
-llm=OpenAI(temperature=0.2)
+llm=OpenAI(temperature=0)
 agent_chain = create_llama_chat_agent(
     toolkit,
     llm,
     memory=memory,
     verbose=True)
-response = agent_chain.run(input=user_input)
-
- 
-
-st.session_state.past.append(user_input)
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
 if user_input:
     output = agent_chain.run(input=user_input) 
     st.session_state.past.append(user_input)  
     st.session_state.generated.append(output)  
-
+    
+if st.session_state['generated']:   
+    for i in range(len(st.session_state['generated'])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 # def send(input):
 #     output = res(input,API_O) 
 #     st.session_state.past.append(input)  

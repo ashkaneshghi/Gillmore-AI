@@ -187,31 +187,31 @@ if user_input:
     st.session_state.generated.append(output)  
 #     message(st.session_state["generated"])
 #     message(st.session_state['past'])
-if st.session_state['generated']:   
-    for i in range(len(st.session_state['generated'])-1, -1, -1):
-        message(st.session_state["generated"][i], key=str(i))
-        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+# if st.session_state['generated']:   
+#     for i in range(len(st.session_state['generated'])-1, -1, -1):
+#         message(st.session_state["generated"][i], key=str(i))
+#         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 # def send(input):
 #     output = res(input,API_O) 
 #     st.session_state.past.append(input)  
 #     st.session_state.generated.append(output)  
 
-# st.button("Send", on_click = send(user_input), type='primary')    
+st.button("Send", on_click = st.session_state.generated.append(output), type='primary')    
 
 # Allow to download as well
-# download_str = []
+download_str = []
 # Display the conversation history using an expander, and allow the user to download it
-# with st.expander("Conversation", expanded=True):
-#     for i in range(len(st.session_state['generated'])-1, -1, -1):
-#         message(st.session_state["generated"][i], key=str(i))
-#         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
-#         download_str.append(st.session_state["past"][i])
-#         download_str.append(st.session_state["generated"][i])
+with st.expander("Conversation", expanded=True):
+    for i in range(len(st.session_state['generated'])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+        download_str.append(st.session_state["past"][i])
+        download_str.append(st.session_state["generated"][i])
     
     # Can throw error - requires fix
-#     download_str = '\n'.join(download_str)
-#     if download_str:
-#         st.download_button('Download',download_str)
+    download_str = '\n'.join(download_str)
+    if download_str:
+        st.download_button('Download',download_str)
 
 # Add a button to start a new chat
   

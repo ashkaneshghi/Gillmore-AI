@@ -195,7 +195,7 @@ if st.session_state['generated']:
 # st.button("Send", on_click = send(user_input), type='primary')    
 
 # Allow to download as well
-download_str = []
+# download_str = []
 # Display the conversation history using an expander, and allow the user to download it
 # with st.expander("Conversation", expanded=True):
 #     for i in range(len(st.session_state['generated'])-1, -1, -1):
@@ -205,9 +205,9 @@ download_str = []
 #         download_str.append(st.session_state["generated"][i])
     
     # Can throw error - requires fix
-    download_str = '\n'.join(download_str)
-    if download_str:
-        st.download_button('Download',download_str)
+#     download_str = '\n'.join(download_str)
+#     if download_str:
+#         st.download_button('Download',download_str)
 
 # Add a button to start a new chat
 st.sidebar.button("New Chat", on_click = new_chat, type='primary')  

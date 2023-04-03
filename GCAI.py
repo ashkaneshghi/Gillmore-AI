@@ -95,7 +95,10 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     
 if API_O:
     user_input = get_text()
-    openai.api_key = API_O
+#     %env OPENAI_API_KEY=API_O
+#     open_api_key = os.getenv("OPENAI_API_KEY")
+#     openai.api_key = API_O
+    os.environ['OPENAI_API_KEY'] = API_O
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
     st.stop() 

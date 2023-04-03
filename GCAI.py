@@ -187,9 +187,10 @@ user_input = get_text()
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
 if user_input:
-    output = agent_chain.run(input=user_input) 
-    st.session_state.past.append(user_input)  
-    st.session_state.generated.append(output)  
+    st.button("Send", on_click = showres(user_input), type='primary')
+#     output = agent_chain.run(input=user_input) 
+#     st.session_state.past.append(user_input)  
+#     st.session_state.generated.append(output)  
 #     message(st.session_state["generated"])
 #     message(st.session_state['past'])
 # if st.session_state['generated']:   
@@ -201,7 +202,7 @@ if user_input:
 #     st.session_state.past.append(input)  
 #     st.session_state.generated.append(output)  
 
-st.button("Send", on_click = showres(user_input), type='primary')    
+    
 
 # Allow to download as well
 download_str = []

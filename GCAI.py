@@ -94,7 +94,7 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     #     )  
     
 if API_O:
-    st.session_state.generated.append("Hello!")
+#     st.session_state.generated.append("Hello!")
     user_input = get_text()
 #     %env OPENAI_API_KEY=API_O
 #     open_api_key = os.getenv("OPENAI_API_KEY")
@@ -181,12 +181,12 @@ if user_input:
     output = agent_chain.run(input=user_input) 
     st.session_state.past.append(user_input)  
     st.session_state.generated.append(output)  
-    message(st.session_state["generated"])
-    message(st.session_state['past'])
-# if st.session_state['generated']:   
-#     for i in range(len(st.session_state['generated'])-1, -1, -1):
-#         message(st.session_state["generated"][i], key=str(i))
-#         message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+#     message(st.session_state["generated"])
+#     message(st.session_state['past'])
+if st.session_state['generated']:   
+    for i in range(len(st.session_state['generated'])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
 # def send(input):
 #     output = res(input,API_O) 
 #     st.session_state.past.append(input)  

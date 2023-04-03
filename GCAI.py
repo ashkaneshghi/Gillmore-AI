@@ -170,8 +170,8 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     
 if API_O:
     # os.environ['OPENAI_API_KEY'] = API_O
-    def generate_response(prompt,AIAPI):
-        message = res(prompt,AIAPI)
+    def generate_response(prompt):
+        message = res(prompt,API_O)
         return message
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
@@ -182,17 +182,17 @@ user_input = get_text()
 st.session_state.past.append(user_input)
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
-# if user_input:
-#     output = generate_response(user_input) 
-#     st.session_state.past.append(user_input)  
-#     st.session_state.generated.append(output)  
+if user_input:
+    output = res(input,API_O) 
+    st.session_state.past.append(user_input)  
+    st.session_state.generated.append(output)  
 
-def send(input,AIAPI):
-    output = generate_response(input,AIAPI) 
+def send(input):
+    output = res(input,API_O) 
     st.session_state.past.append(input)  
     st.session_state.generated.append(output)  
 
-st.button("Send", on_click = send(user_input,API_O), type='primary')    
+# st.button("Send", on_click = send(user_input), type='primary')    
 
 # Allow to download as well
 download_str = []

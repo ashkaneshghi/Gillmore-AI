@@ -178,6 +178,11 @@ agent_chain = create_llama_chat_agent(
     memory=memory,
     verbose=True)
 
+def showres(prompt):
+    output = agent_chain.run(input=prompt) 
+    st.session_state.past.append(prompt)  
+    st.session_state.generated.append(output)
+
 user_input = get_text()
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
@@ -196,7 +201,7 @@ if user_input:
 #     st.session_state.past.append(input)  
 #     st.session_state.generated.append(output)  
 
-st.button("Send", on_click = st.session_state.generated.append(output), type='primary')    
+st.button("Send", on_click = showres(user_input), type='primary')    
 
 # Allow to download as well
 download_str = []

@@ -31,7 +31,7 @@ if "stored_session" not in st.session_state:
     st.session_state["stored_session"] = []
     
 def res(prompt,AIAPI):
-    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=512))
+    llm_predictor = LLMPredictor(llm=OpenAI(temperature=0.1, max_tokens=512))
     service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
     index_summaries = ['Fintech related papers' for i in range(0,11)]
     index_summaries[0] = 'WITS-WBS Gillmore Centre Fintech Workshop & Industry Conference'
@@ -96,7 +96,7 @@ def res(prompt,AIAPI):
         graph_configs=[graph_config])
 
     memory = ConversationBufferMemory(memory_key="chat_history")
-    llm=OpenAI(temperature=0.5, openai_api_key=AIAPI)
+    llm=OpenAI(temperature=0.1, openai_api_key=AIAPI)
     agent_chain = create_llama_chat_agent(
         toolkit,
         llm,

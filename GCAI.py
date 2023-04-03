@@ -206,7 +206,7 @@ with st.expander("Conversation", expanded=True):
         st.download_button('Download',download_str)
 
 # Add a button to start a new chat
- st.sidebar.button("New Chat", on_click = new_chat, type='primary')  
+st.sidebar.button("New Chat", on_click = new_chat, type='primary')  
 
 # st.button("New Chat", on_click = new_chat, type='primary')
 # Display stored conversation sessions in the sidebar

@@ -95,7 +95,7 @@ API_O = st.sidebar.text_input("API-KEY", type="password")
     
 if API_O:
 #     st.session_state.generated.append("Hello!")
-    user_input = get_text()
+    
 #     %env OPENAI_API_KEY=API_O
 #     open_api_key = os.getenv("OPENAI_API_KEY")
 #     openai.api_key = API_O
@@ -103,7 +103,9 @@ if API_O:
 else:
     st.sidebar.warning('API key required to try this app.The API key is not stored in any form.')
     st.stop() 
-    
+
+st.sidebar.button("New Chat", on_click = new_chat, type='primary')
+
 llm_predictor = LLMPredictor(llm=OpenAI(temperature=0, max_tokens=512))
 service_context = ServiceContext.from_defaults(llm_predictor=llm_predictor)
 index_summaries = ['Fintech related papers' for i in range(0,11)]
@@ -176,6 +178,8 @@ agent_chain = create_llama_chat_agent(
     memory=memory,
     verbose=True)
 
+user_input = get_text()
+
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
 if user_input:
     output = agent_chain.run(input=user_input) 
@@ -210,7 +214,7 @@ if st.session_state['generated']:
 #         st.download_button('Download',download_str)
 
 # Add a button to start a new chat
-st.sidebar.button("New Chat", on_click = new_chat, type='primary')  
+  
 
 # st.button("New Chat", on_click = new_chat, type='primary')
 # Display stored conversation sessions in the sidebar

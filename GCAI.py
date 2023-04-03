@@ -187,6 +187,7 @@ user_input = get_text()
 
 # Generate the output using the ConversationChain object and the user input, and add the input/output to the session
 if user_input:
+    showres(user_input)
     st.button("Send", on_click = showres(user_input), type='primary')
 #     output = agent_chain.run(input=user_input) 
 #     st.session_state.past.append(user_input)  
@@ -209,8 +210,8 @@ download_str = []
 # Display the conversation history using an expander, and allow the user to download it
 with st.expander("Conversation", expanded=True):
     for i in range(len(st.session_state['generated'])-1, -1, -1):
-        message(st.session_state["generated"][i], key=str(i))
-        message(st.session_state['past'][i], is_user=True, key=str(i) + '_user')
+        st.info(st.session_state["past"][i],icon="🧐")
+        st.success(st.session_state["generated"][i], icon="🤖")
         download_str.append(st.session_state["past"][i])
         download_str.append(st.session_state["generated"][i])
     

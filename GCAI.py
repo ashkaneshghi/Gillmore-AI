@@ -22,7 +22,7 @@ from pathlib import Path
 st.set_page_config(page_title='Gillmore AI', layout='wide')
 # Initialize session states
 if "generated" not in st.session_state:
-    st.session_state["generated"] = ['Hello! How can I help?']
+    st.session_state["generated"] = []
 if "past" not in st.session_state:
     st.session_state["past"] = []
 if "input" not in st.session_state:
